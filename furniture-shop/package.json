@@ -1,0 +1,15 @@
+{
+  "name": "furniture-shop-monorepo",
+  "private": true,
+  "packageManager": "pnpm@8.12.1",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "start": "pnpm --filter web start",
+    "lint": "pnpm --filter web lint",
+    "test": "pnpm --filter web test:unit",
+    "typecheck": "pnpm --filter web typecheck",
+    "e2e": "pnpm --filter web test:e2e",
+    "seed": "pnpm --filter web seed"
+  }
+}

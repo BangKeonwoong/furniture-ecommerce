@@ -1,0 +1,28 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+*.log
+*.local
+.env
+.env.*
+
+# prisma
+dev.db
+dev.db-journal
+
+# editor
+.vscode
+.idea

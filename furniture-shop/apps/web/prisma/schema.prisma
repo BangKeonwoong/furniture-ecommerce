@@ -1,0 +1,98 @@
+// Prisma schema for furniture catalog
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Product {
+  id               String    @id @default(cuid())
+  slug             String    @unique
+  title            String
+  subtitle         String?
+  description      String
+  brand            String?
+  collectionId     String?
+  collection       Collection? @relation(fields: [collectionId], references: [id])
+  category         String
+  madeToOrder      Boolean   @default(false)
+  shippingClass    String
+  warrantyMonths   Int?
+  careInstructions String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  variants         Variant[]
+  images           Image[]
+  reviews          Review[]
+  qna              Question[]
+  attributes       String?
+}
+
+model Variant {
+  id                String         @id @default(cuid())
+  productId         String
+  product           Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sku               String         @unique
+  price             Int            // cents
+  compareAt         Int?
+  currency          String         @default("USD")
+  color             String?
+  finish            String?
+  material          String?
+  swatchImage       String?
+  stockQty          Int            @default(0)
+  leadTimeDays      Int            @default(0)
+  weightKg          Float?
+  packageCount      Int?
+  boxDims           String?
+  dimensions        String?
+  weightCapacity    Int?
+  assemblyRequired  Boolean        @default(false)
+  assemblyTimeMin   Int?
+  status            String         @default("ACTIVE")
+  gallery           Image[]
+}
+
+model Image {
+  id        String  @id @default(cuid())
+  productId String?
+  variantId String?
+  url       String
+  alt       String
+  sort      Int     @default(0)
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variant   Variant? @relation(fields: [variantId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  rating    Int
+  title     String?
+  body      String?
+  photos    String?
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Question {
+  id        String   @id @default(cuid())
+  productId String
+  body      String
+  answer    String?
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Collection {
+  id      String    @id @default(cuid())
+  slug    String    @unique
+  title   String
+  heroImg String?
+  intro   String?
+  products Product[]
+}
