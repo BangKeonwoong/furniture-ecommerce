@@ -1,10 +1,9 @@
 # Backlog Summary — Sprint Prep
 
 ## Outstanding Blockers
-- 네트워크 제한으로 인한 `pnpm install` / Playwright 브라우저 설치 불가.
-- 외부 키(Stripe, Typesense) 미확보로 실 연동 대기.
+- Playwright 브라우저/의존성 설치 대기.
+- Stripe/Typesense API 키 미확보.
 - 디자인 산출물(Figma, 이미지, 3D 모델) 전달 대기.
-- 체크아웃 단계 상태 공유(주소/배송 선택값) 저장 방식 미결정.
 
 ## Next Sprint Objectives
 1. **모바일 QA 개선**
