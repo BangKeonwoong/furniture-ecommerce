@@ -41,8 +41,29 @@ echo "$SERVER_PID" > "$PID_FILE"
 
 sleep 2
 if ps -p "$SERVER_PID" > /dev/null 2>&1; then
+  BASE_URL=""
+  for _ in {1..15}; do
+    if [ -f "$LOG_FILE" ]; then
+      FOUND_URL=$(grep -Eo "http://localhost:[0-9]+" "$LOG_FILE" | tail -n1 || true)
+      if [ -n "$FOUND_URL" ]; then
+        BASE_URL="$FOUND_URL"
+        break
+      fi
+    fi
+    sleep 1
+  done
+
+  if [ -z "$BASE_URL" ]; then
+    BASE_URL="http://localhost:3000"
+  fi
+
+  PLAYWRIGHT_ENV_FILE="$APP_DIR/.env.local-playwright"
+  echo "PLAYWRIGHT_BASE_URL=$BASE_URL" > "$PLAYWRIGHT_ENV_FILE"
+  echo "$BASE_URL" > "$TMP_DIR/playwright-base-url"
+
   echo "✅ 개발 서버가 실행 중입니다 (PID: $SERVER_PID)."
-  echo "   http://localhost:3000 에 접속하세요."
+  echo "   $BASE_URL 에 접속하세요."
+  echo "   Playwright 환경 변수 파일: $PLAYWRIGHT_ENV_FILE"
   echo "   로그는 $LOG_FILE 에 기록됩니다."
 else
   echo "❌ 서버 실행에 실패했습니다. 로그를 확인하세요: $LOG_FILE"

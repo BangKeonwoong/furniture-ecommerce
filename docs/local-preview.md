@@ -46,3 +46,4 @@ pnpm dev
 - `pnpm test`로 유틸 단위 테스트를 실행할 수 있습니다.
 - `pnpm lint`, `pnpm typecheck`를 실행해 코드 품질을 검증하세요.
 - Vercel 배포 시 `pnpm build`로 사전 검증 후 배포합니다.
+- Playwright E2E 실행 시 포트가 3000이 아닐 경우 `PLAYWRIGHT_BASE_URL=http://localhost:3001 pnpm e2e` 같이 환경 변수를 지정하면 자동으로 해당 포트를 사용합니다.

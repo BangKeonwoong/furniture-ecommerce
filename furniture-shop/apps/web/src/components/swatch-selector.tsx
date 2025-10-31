@@ -1,30 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import type { ProductDetail } from "@/lib/product-detail";
 
 export function SwatchSelector({
   variants,
+  selectedId,
   onChange
 }: {
   variants: ProductDetail["variants"];
+  selectedId?: string;
   onChange?: (id: string) => void;
 }) {
-  const [selected, setSelected] = useState(variants[0]?.id ?? "");
+  const [internalSelected, setInternalSelected] = useState(variants[0]?.id ?? "");
+  const resolvedSelected = selectedId ?? internalSelected;
 
   return (
     <div className="space-y-2">
       <p className="text-xs font-medium uppercase tracking-[0.25em] text-slate-500">마감 선택</p>
       <div className="flex flex-wrap gap-3">
         {variants.map((variant) => {
-          const isSelected = variant.id === selected;
+          const isSelected = variant.id === resolvedSelected;
           return (
             <button
               key={variant.id}
               type="button"
               disabled={!variant.inStock}
+              aria-pressed={isSelected}
               onClick={() => {
-                setSelected(variant.id);
+                if (selectedId === undefined) {
+                  setInternalSelected(variant.id);
+                }
                 onChange?.(variant.id);
               }}
               className={`flex items-center gap-3 rounded-full border px-4 py-2 text-sm transition ${

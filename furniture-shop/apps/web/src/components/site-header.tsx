@@ -1,15 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import type { Route } from "next";
 import { useState } from "react";
 
 const navLinks = [
-  { href: "/category/seating", label: "Seating" },
-  { href: "/category/bedroom", label: "Bedroom" },
-  { href: "/category/dining", label: "Dining" },
-  { href: "/services", label: "Services" },
-  { href: "/stories", label: "Stories" }
-];
+  { href: "/category/seating" as Route, label: "Seating" },
+  { href: "/category/bedroom" as Route, label: "Bedroom" },
+  { href: "/category/dining" as Route, label: "Dining" },
+  { href: "/services" as Route, label: "Services" },
+  { href: "/stories" as Route, label: "Stories" }
+] satisfies Array<{ href: Route; label: string }>;
+
+const tradeRoute = "/trade" as Route;
+const searchRoute = "/search" as Route;
+const cartRoute = "/cart" as Route;
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -26,19 +31,19 @@ export function SiteHeader() {
               {link.label}
             </Link>
           ))}
-          <Link href="/trade" className="text-slate-500 hover:text-slate-900">
+          <Link href={tradeRoute} className="text-slate-500 hover:text-slate-900">
             Trade
           </Link>
         </nav>
         <div className="hidden items-center gap-3 md:flex">
           <Link
-            href="/search"
+            href={searchRoute}
             className="rounded-full border border-slate-200 px-3 py-1 text-sm text-slate-600 hover:border-slate-300 hover:text-slate-900"
           >
             검색
           </Link>
           <Link
-            href="/cart"
+            href={cartRoute}
             className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
           >
             장바구니
@@ -69,13 +74,13 @@ export function SiteHeader() {
                 {link.label}
               </Link>
             ))}
-            <Link href="/trade" onClick={() => setOpen(false)}>
+            <Link href={tradeRoute} onClick={() => setOpen(false)}>
               Trade Program
             </Link>
-            <Link href="/search" onClick={() => setOpen(false)}>
+            <Link href={searchRoute} onClick={() => setOpen(false)}>
               빠른 검색
             </Link>
-            <Link href="/cart" onClick={() => setOpen(false)} className="font-semibold text-slate-900">
+            <Link href={cartRoute} onClick={() => setOpen(false)} className="font-semibold text-slate-900">
               장바구니 보기
             </Link>
           </nav>

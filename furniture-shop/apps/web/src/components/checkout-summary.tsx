@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { Route } from "next";
 import { CartItem, useCartStore } from "@/lib/store/cart-store";
 
 function formatCurrency(value: number, currency: string) {
@@ -9,7 +10,7 @@ function formatCurrency(value: number, currency: string) {
 
 type CheckoutSummaryProps = {
   ctaLabel?: string;
-  ctaHref?: string;
+  ctaHref?: Route;
   sticky?: boolean;
 };
 
@@ -28,7 +29,14 @@ export function CheckoutSummary({ ctaLabel, ctaHref, sticky = false }: CheckoutS
       <p className="text-sm font-semibold text-slate-900">주문 요약</p>
       {items.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-200 p-4 text-xs text-slate-500">
-          장바구니에 담긴 상품이 없습니다. <Link href="/category/seating" className="underline">카테고리</Link>에서 둘러보세요.
+          장바구니에 담긴 상품이 없습니다.{" "}
+          <Link
+            href={{ pathname: "/category/[slug]", query: { slug: "seating" } }}
+            className="underline"
+          >
+            카테고리
+          </Link>
+          에서 둘러보세요.
         </div>
       ) : (
         <ul className="space-y-3 text-xs text-slate-500">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Route } from "next";
 import Image from "next/image";
 import { HERO_PLACEHOLDER } from "@/lib/placeholders";
 
@@ -6,7 +7,11 @@ const categories = [
   { slug: "seating", title: "Seating", description: "Sofas, sectionals, and lounge chairs built for everyday comfort." },
   { slug: "bedroom", title: "Bedroom", description: "Beds and storage designed to transform your retreat." },
   { slug: "dining", title: "Dining", description: "Gathering tables and chairs with honest materials." }
-];
+] as const;
+
+const seatingRoute = "/category/seating" as Route;
+const storiesRoute = "/stories" as Route;
+const categoryRoute = "/category" as Route;
 
 export default function HomePage() {
   return (
@@ -23,16 +28,10 @@ export default function HomePage() {
             빠른 배송 ETA, 화이트글러브 설치, AR 미리보기까지 갖춘 올인원 쇼핑 경험입니다.
           </p>
           <div className="flex flex-wrap gap-3">
-            <Link
-              href="/category/seating"
-              className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
-            >
+            <Link href={seatingRoute} className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
               쇼파 & 체어 보기
             </Link>
-            <Link
-              href="/stories"
-              className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 hover:border-slate-400"
-            >
+            <Link href={storiesRoute} className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 hover:border-slate-400">
               공간별 스타일 가이드
             </Link>
           </div>
@@ -44,13 +43,17 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-6 pb-20">
         <div className="flex items-center justify-between py-6">
           <h2 className="text-2xl font-semibold text-slate-900">카테고리 둘러보기</h2>
-          <Link href="/category" className="text-sm font-medium text-slate-600 hover:text-slate-900">
+          <Link href={categoryRoute} className="text-sm font-medium text-slate-600 hover:text-slate-900">
             전체 보기
           </Link>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
           {categories.map((category) => (
-            <Link key={category.slug} href={`/category/${category.slug}`} className="group rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+            <Link
+              key={category.slug}
+              href={{ pathname: "/category/[slug]", query: { slug: category.slug } }}
+              className="group rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+            >
               <p className="text-xs uppercase tracking-[0.25em] text-slate-400">{category.slug}</p>
               <h3 className="mt-2 text-xl font-semibold text-slate-900">{category.title}</h3>
               <p className="mt-2 text-sm text-slate-600">{category.description}</p>

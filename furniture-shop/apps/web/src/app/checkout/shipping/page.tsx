@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import type { Route } from "next";
 import { CheckoutSummary } from "@/components/checkout-summary";
 import { useCheckoutStore } from "@/lib/store/checkout-store";
 
@@ -22,6 +23,8 @@ const FALLBACK_OPTIONS: ShippingOption[] = [
     price: 0
   }
 ];
+
+const paymentRoute = "/checkout/payment" as Route;
 
 export default function CheckoutShippingPage() {
   const { address, setAddress, shippingOption, setShippingOption } = useCheckoutStore();
@@ -144,7 +147,7 @@ export default function CheckoutShippingPage() {
         </div>
 
         <Link
-          href="/checkout/payment"
+          href={paymentRoute}
           className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
         >
           다음 단계: 결제 정보

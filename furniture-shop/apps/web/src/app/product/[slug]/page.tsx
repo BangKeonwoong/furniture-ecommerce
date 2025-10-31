@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductPolicies } from "@/components/product-policies";
-import { SwatchSelector } from "@/components/swatch-selector";
+import { ProductConfigurator } from "@/components/product-configurator";
 import { estimateEta } from "@/lib/eta";
 import { getProductDetail } from "@/lib/product-detail";
 import { mmToCm } from "@/lib/units";
@@ -41,37 +41,32 @@ export default async function ProductPage({ params }: { params: { slug: string }
               )}
             </div>
 
-            <SwatchSelector variants={product.variants} />
-
-            <div className="space-y-4 text-sm text-slate-600">
-              <p>{product.description}</p>
-              <ul className="list-disc space-y-2 pl-5">
-                {product.features.map((feature) => (
-                  <li key={feature}>{feature}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm">
-              <p className="font-semibold text-slate-900">{etaLabel}</p>
-              <p className="mt-1 text-slate-600">화이트글러브 배송 · 설치 포함 · 시간 지정 안내 예정</p>
-            </div>
-
-            <div className="grid gap-4 rounded-3xl border border-slate-200 bg-white p-6 text-sm text-slate-600">
-              <p className="text-sm font-semibold text-slate-900">치수 (cm)</p>
-              <div className="grid grid-cols-2 gap-3">
-                <span>가로: {mmToCm(product.dimensions.width)}cm</span>
-                <span>세로: {mmToCm(product.dimensions.depth)}cm</span>
-                <span>높이: {mmToCm(product.dimensions.height)}cm</span>
-                {product.dimensions.seatHeight && <span>좌방석 높이: {mmToCm(product.dimensions.seatHeight)}cm</span>}
-                {product.dimensions.armHeight && <span>팔걸이 높이: {mmToCm(product.dimensions.armHeight)}cm</span>}
+            <ProductConfigurator product={product} priceLabel={finalPrice}>
+              <div className="space-y-4 text-sm text-slate-600">
+                <p>{product.description}</p>
+                <ul className="list-disc space-y-2 pl-5">
+                  {product.features.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
               </div>
-            </div>
 
-            <button className="fixed inset-x-0 bottom-0 flex items-center justify-between bg-white px-6 py-4 text-sm shadow-2xl md:static md:rounded-full md:border md:border-slate-200 md:bg-slate-900 md:px-8 md:py-4 md:text-base md:text-white md:shadow-none">
-              <span>장바구니에 담기</span>
-              <span className="font-semibold">{finalPrice}</span>
-            </button>
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm">
+                <p className="font-semibold text-slate-900">{etaLabel}</p>
+                <p className="mt-1 text-slate-600">화이트글러브 배송 · 설치 포함 · 시간 지정 안내 예정</p>
+              </div>
+
+              <div className="grid gap-4 rounded-3xl border border-slate-200 bg-white p-6 text-sm text-slate-600">
+                <p className="text-sm font-semibold text-slate-900">치수 (cm)</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <span>가로: {mmToCm(product.dimensions.width)}cm</span>
+                  <span>세로: {mmToCm(product.dimensions.depth)}cm</span>
+                  <span>높이: {mmToCm(product.dimensions.height)}cm</span>
+                  {product.dimensions.seatHeight && <span>좌방석 높이: {mmToCm(product.dimensions.seatHeight)}cm</span>}
+                  {product.dimensions.armHeight && <span>팔걸이 높이: {mmToCm(product.dimensions.armHeight)}cm</span>}
+                </div>
+              </div>
+            </ProductConfigurator>
           </div>
         </div>
 

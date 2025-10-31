@@ -8,3 +8,5 @@
 - [ ] Docker Desktop (Postgres/Redis 컨테이너 실행 시)
 - [ ] VS Code + 확장: ESLint, Tailwind CSS IntelliSense, Prisma, i18n Ally
 - [ ] Browserslist 테스트용 Chrome/Edge 최신 버전, Safari 16+
+- [ ] Playwright 모바일 스모크 실행: `pnpm e2e` (iPhone SE 프로필 포함)
+- [ ] Vitest 단위 테스트 실행: `pnpm --filter web test:unit`

@@ -1,5 +1,9 @@
+"use client";
+
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+
+import type { PgApprovalResult, PgPaymentResult } from "@/lib/payments/types";
 
 export type CheckoutState = {
   address: {
@@ -10,13 +14,15 @@ export type CheckoutState = {
     address2: string;
   };
   shippingOption: string;
-  clientSecret?: string | null;
+  paymentSession?: PgPaymentResult | null;
+  paymentApproval?: PgApprovalResult | null;
 };
 
 export type CheckoutStore = CheckoutState & {
   setAddress: (address: CheckoutState["address"]) => void;
   setShippingOption: (option: string) => void;
-  setClientSecret: (secret: string | null) => void;
+  setPaymentSession: (session: PgPaymentResult | null) => void;
+  setPaymentApproval: (approval: PgApprovalResult | null) => void;
   reset: () => void;
 };
 
@@ -29,7 +35,8 @@ const defaultState: CheckoutState = {
     address2: ""
   },
   shippingOption: "white-glove",
-  clientSecret: null
+  paymentSession: null,
+  paymentApproval: null
 };
 
 export const useCheckoutStore = create<CheckoutStore>()(
@@ -38,7 +45,8 @@ export const useCheckoutStore = create<CheckoutStore>()(
       ...defaultState,
       setAddress: (address) => set({ address }),
       setShippingOption: (option) => set({ shippingOption: option }),
-      setClientSecret: (secret) => set({ clientSecret: secret }),
+      setPaymentSession: (session) => set({ paymentSession: session }),
+      setPaymentApproval: (approval) => set({ paymentApproval: approval }),
       reset: () => set(defaultState)
     }),
     {

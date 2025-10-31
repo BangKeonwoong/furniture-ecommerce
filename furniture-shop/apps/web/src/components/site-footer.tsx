@@ -1,31 +1,32 @@
 import Link from "next/link";
+import type { Route } from "next";
 
 const footerLinks = [
   {
     heading: "고객 지원",
     links: [
-      { label: "배송 안내", href: "/policies/shipping" },
-      { label: "반품 및 교환", href: "/policies/returns" },
-      { label: "화이트글러브", href: "/services/white-glove" }
+      { label: "배송 안내", href: "/policies/shipping" as Route },
+      { label: "반품 및 교환", href: "/policies/returns" as Route },
+      { label: "화이트글러브", href: "/services/white-glove" as Route }
     ]
   },
   {
     heading: "회사",
     links: [
-      { label: "브랜드 이야기", href: "/about" },
-      { label: "지속가능성", href: "/sustainability" },
-      { label: "채용", href: "/careers" }
+      { label: "브랜드 이야기", href: "/about" as Route },
+      { label: "지속가능성", href: "/sustainability" as Route },
+      { label: "채용", href: "/careers" as Route }
     ]
   },
   {
     heading: "연결하기",
     links: [
-      { label: "무드보드", href: "/stories" },
-      { label: "트레이드 프로그램", href: "/trade" },
-      { label: "뉴스레터", href: "/newsletter" }
+      { label: "무드보드", href: "/stories" as Route },
+      { label: "트레이드 프로그램", href: "/trade" as Route },
+      { label: "뉴스레터", href: "/newsletter" as Route }
     ]
   }
-];
+] satisfies Array<{ heading: string; links: Array<{ label: string; href: Route }> }>;
 
 export function SiteFooter() {
   return (

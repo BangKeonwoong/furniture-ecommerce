@@ -8,8 +8,13 @@
     "start": "pnpm --filter web start",
     "lint": "pnpm --filter web lint",
     "test": "pnpm --filter web test:unit",
+    "test:unit": "pnpm --filter web test:unit",
+    "prepare": "git config core.hooksPath furniture-shop/.husky",
     "typecheck": "pnpm --filter web typecheck",
     "e2e": "pnpm --filter web test:e2e",
     "seed": "pnpm --filter web seed"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
   }
 }

@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent } from "react";
 import { CheckoutSummary } from "@/components/checkout-summary";
 import { useCheckoutStore } from "@/lib/store/checkout-store";
@@ -13,6 +16,7 @@ function useCheckoutAddress() {
 }
 
 export default function CheckoutAddressPage() {
+  const router = useRouter();
   const { address, handleChange } = useCheckoutAddress();
 
   return (
@@ -21,7 +25,7 @@ export default function CheckoutAddressPage() {
         className="space-y-6 rounded-3xl border border-slate-200 bg-white p-4 sm:p-6"
         onSubmit={(event: FormEvent<HTMLFormElement>) => {
           event.preventDefault();
-          window.location.href = "/checkout/shipping";
+          router.push("/checkout/shipping");
         }}
       >
         <div>
