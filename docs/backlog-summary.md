@@ -1,7 +1,7 @@
 # Backlog Summary — Sprint Prep
 
 ## Outstanding Blockers
-- Playwright 브라우저/의존성 설치 대기.
+- Playwright 브라우저/의존성 설치 대기 (현재는 DevTools 모바일 시뮬레이터로 수동 QA 진행).
 - Stripe/Typesense API 키 미확보.
 - 디자인 산출물(Figma, 이미지, 3D 모델) 전달 대기.
 

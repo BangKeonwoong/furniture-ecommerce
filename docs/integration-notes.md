@@ -15,4 +15,4 @@
 - 배송 견적 API 응답을 `checkout/shipping` 단계에 실시간 반영.
 - 주문 제출 시 백오피스/OMS 연동 및 이메일 발송 큐 연결.
 - Stripe/Typesense API 키 확보 후 `.env` 업데이트 및 문서화.
-- Playwright 설치 시 네트워크 접근 허용 필요 (E2E 자동화 준비).
+- Playwright 설치 시 네트워크 접근 허용 필요 (E2E 자동화 준비, 설치 전까지 DevTools 시뮬레이터로 모바일 뷰 QA).
