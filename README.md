@@ -28,3 +28,6 @@
 - `pnpm lint` / `pnpm typecheck` / `pnpm test` (Vitest) / `pnpm e2e` (Playwright 설치 후)
 - 원클릭 스크립트: `bash furniture-shop/scripts/dev-start.sh`, `bash furniture-shop/scripts/dev-stop.sh`, `bash furniture-shop/scripts/dev-test.sh`
 - 수동 QA 체크리스트는 `docs/qa-notes.md`, 로그는 `docs/analytics-qa-log.md` 참고
+
+## Repository
+- GitHub: https://github.com/BangKeonwoong/furniture-ecommerce
