@@ -24,7 +24,7 @@ const FALLBACK_OPTIONS: ShippingOption[] = [
 ];
 
 export default function CheckoutShippingPage() {
-  const { address, shippingOption, setShippingOption } = useCheckoutStore();
+  const { address, setAddress, shippingOption, setShippingOption } = useCheckoutStore();
   const [postalCode, setPostalCode] = useState("");
   const [options, setOptions] = useState<ShippingOption[]>(FALLBACK_OPTIONS);
   const [loading, setLoading] = useState(false);
@@ -38,7 +38,7 @@ export default function CheckoutShippingPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          postalCode: code?.trim() || "00000",
+          postalCode: code?.trim() || address.postalCode || "00000",
           shippingClass: "WHITE_GLOVE"
         })
       });
@@ -64,8 +64,12 @@ export default function CheckoutShippingPage() {
 
   useEffect(() => {
     // pre-fill postal code from address store
-    setPostalCode(address.postalCode);
-    fetchQuotes(address.postalCode);
+    setPostalCode(address.postalCode ?? "");
+    if (address.postalCode) {
+      fetchQuotes(address.postalCode);
+    } else {
+      fetchQuotes();
+    }
   }, [address.postalCode]);
 
   return (
@@ -85,7 +89,11 @@ export default function CheckoutShippingPage() {
           >
             <input
               value={postalCode}
-              onChange={(event) => setPostalCode(event.target.value)}
+              onChange={(event) => {
+                const value = event.target.value;
+                setPostalCode(value);
+                setAddress({ ...address, postalCode: value });
+              }}
               className="w-28 rounded-full border border-slate-200 px-3 py-2 text-sm"
               placeholder="우편번호"
             />

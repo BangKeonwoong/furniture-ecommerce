@@ -13,27 +13,36 @@ async function getPrismaProductsByCategory(category: string) {
         images: {
           orderBy: { sort: "asc" },
           take: 1
-        }
+        },
+        reviews: true
       }
     });
 
     if (!rows.length) return null;
 
-    return rows.map((row) => ({
-      slug: row.slug,
-      title: row.title,
-      price: row.variants[0]?.price ?? 0,
-      currency: row.variants[0]?.currency ?? "KRW",
-      leadTimeDays: row.variants[0]?.leadTimeDays ?? 0,
-      shippingClass: (row.shippingClass ?? "WHITE_GLOVE") as ProductSummary["shippingClass"],
-      thumbnail: row.images[0]?.url ?? PRODUCT_THUMBNAIL_PLACEHOLDER,
-      rating: 4.7,
-      reviewCount: 24,
-      colors: row.variants
-        .map((variant) => variant.color)
-        .filter(Boolean) as string[],
-      category: row.category
-    }));
+    return rows.map((row) => {
+      const reviewCount = row.reviews.length;
+      const rating =
+        reviewCount > 0
+          ? row.reviews.reduce((acc, review) => acc + review.rating, 0) / reviewCount
+          : 0;
+
+      return {
+        slug: row.slug,
+        title: row.title,
+        price: row.variants[0]?.price ?? 0,
+        currency: row.variants[0]?.currency ?? "KRW",
+        leadTimeDays: row.variants[0]?.leadTimeDays ?? 0,
+        shippingClass: (row.shippingClass ?? "WHITE_GLOVE") as ProductSummary["shippingClass"],
+        thumbnail: row.images[0]?.url ?? PRODUCT_THUMBNAIL_PLACEHOLDER,
+        rating: reviewCount > 0 ? Number(rating.toFixed(1)) : 0,
+        reviewCount,
+        colors: row.variants
+          .map((variant) => variant.color)
+          .filter(Boolean) as string[],
+        category: row.category
+      };
+    });
   } catch (error) {
     return null;
   }
@@ -52,24 +61,33 @@ async function searchPrismaProducts(term: string) {
       },
       include: {
         variants: { orderBy: { createdAt: "asc" }, take: 1 },
-        images: { orderBy: { sort: "asc" }, take: 1 }
+        images: { orderBy: { sort: "asc" }, take: 1 },
+        reviews: true
       }
     });
 
     if (!rows.length) return null;
-    return rows.map((row) => ({
-      slug: row.slug,
-      title: row.title,
-      price: row.variants[0]?.price ?? 0,
-      currency: row.variants[0]?.currency ?? "KRW",
-      leadTimeDays: row.variants[0]?.leadTimeDays ?? 0,
-      shippingClass: (row.shippingClass ?? "WHITE_GLOVE") as ProductSummary["shippingClass"],
-      thumbnail: row.images[0]?.url ?? PRODUCT_THUMBNAIL_PLACEHOLDER,
-      rating: 4.7,
-      reviewCount: 24,
-      colors: row.variants.map((variant) => variant.color).filter(Boolean) as string[],
-      category: row.category
-    }));
+    return rows.map((row) => {
+      const reviewCount = row.reviews.length;
+      const rating =
+        reviewCount > 0
+          ? row.reviews.reduce((acc, review) => acc + review.rating, 0) / reviewCount
+          : 0;
+
+      return {
+        slug: row.slug,
+        title: row.title,
+        price: row.variants[0]?.price ?? 0,
+        currency: row.variants[0]?.currency ?? "KRW",
+        leadTimeDays: row.variants[0]?.leadTimeDays ?? 0,
+        shippingClass: (row.shippingClass ?? "WHITE_GLOVE") as ProductSummary["shippingClass"],
+        thumbnail: row.images[0]?.url ?? PRODUCT_THUMBNAIL_PLACEHOLDER,
+        rating: reviewCount > 0 ? Number(rating.toFixed(1)) : 0,
+        reviewCount,
+        colors: row.variants.map((variant) => variant.color).filter(Boolean) as string[],
+        category: row.category
+      };
+    });
   } catch (error) {
     return null;
   }

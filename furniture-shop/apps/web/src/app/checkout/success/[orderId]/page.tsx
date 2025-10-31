@@ -1,6 +1,16 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect } from "react";
+import { useCheckoutStore } from "@/lib/store/checkout-store";
 
 export default function CheckoutSuccessPage({ params }: { params: { orderId: string } }) {
+  const reset = useCheckoutStore((state) => state.reset);
+
+  useEffect(() => {
+    reset();
+  }, [reset]);
+
   return (
     <div className="bg-white">
       <section className="mx-auto w-full max-w-3xl px-6 py-20 text-center">

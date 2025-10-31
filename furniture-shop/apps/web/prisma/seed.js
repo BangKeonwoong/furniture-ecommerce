@@ -53,6 +53,20 @@ const PRODUCTS = [
     gallery: [
       { url: PLACEHOLDERS.hero, alt: "Orion modular sofa" },
       { url: "https://picsum.photos/seed/orion-detail/1200/800", alt: "Orion detail" }
+    ],
+    reviews: [
+      {
+        rating: 5,
+        title: "훌륭한 마감",
+        body: "화이트글러브 팀이 설치까지 완벽하게 마무리했습니다.",
+        photos: ["https://picsum.photos/seed/orion-review/600/400"]
+      }
+    ],
+    questions: [
+      {
+        body: "모듈 구성을 바꿀 수 있나요?",
+        answer: "좌/우 변환이 가능한 구조로 제작되어 있습니다."
+      }
     ]
   },
   {
@@ -94,6 +108,20 @@ const PRODUCTS = [
     gallery: [
       { url: PLACEHOLDERS.lounge, alt: "Luna lounge chair" },
       { url: "https://picsum.photos/seed/luna-detail/1200/800", alt: "Luna detail" }
+    ],
+    reviews: [
+      {
+        rating: 4,
+        title: "편안하지만 단단함",
+        body: "작은 공간에 잘 맞아요. 회전 기능도 부드럽습니다.",
+        photos: []
+      }
+    ],
+    questions: [
+      {
+        body: "커버는 분리 세탁 가능한가요?",
+        answer: "부분 세탁 가능하며, 미지근한 물로 세척을 권장합니다."
+      }
     ]
   },
   {
@@ -135,6 +163,20 @@ const PRODUCTS = [
     gallery: [
       { url: PLACEHOLDERS.bed, alt: "Aeris platform bed" },
       { url: "https://picsum.photos/seed/aeris-detail/1200/800", alt: "Aeris drawer detail" }
+    ],
+    reviews: [
+      {
+        rating: 5,
+        title: "수납이 넉넉해요",
+        body: "서랍이 깊어 겨울 이불까지 들어갑니다.",
+        photos: []
+      }
+    ],
+    questions: [
+      {
+        body: "높이를 조절할 수 있나요?",
+        answer: "헤드보드 높이는 고정형이며 베드프레임 높이는 동일합니다."
+      }
     ]
   },
   {
@@ -167,6 +209,20 @@ const PRODUCTS = [
     gallery: [
       { url: PLACEHOLDERS.dining, alt: "Selene dining table" },
       { url: "https://picsum.photos/seed/selene-detail/1200/800", alt: "Selene leg detail" }
+    ],
+    reviews: [
+      {
+        rating: 4,
+        title: "가족 모임에 적합",
+        body: "6명이 앉아도 넉넉합니다. 표면 마감이 고급스럽네요.",
+        photos: []
+      }
+    ],
+    questions: [
+      {
+        body: "방수 코팅이 되어 있나요?",
+        answer: "마린 그레이드 마감으로 가벼운 물기도 쉽게 닦입니다."
+      }
     ]
   }
 ];
@@ -193,7 +249,7 @@ async function seed() {
   });
 
   for (const product of PRODUCTS) {
-    await prisma.product.create({
+    const created = await prisma.product.create({
       data: {
         slug: product.slug,
         title: product.title,
@@ -227,6 +283,28 @@ async function seed() {
         }
       }
     });
+
+    if (product.reviews?.length) {
+      await prisma.review.createMany({
+        data: product.reviews.map((review) => ({
+          productId: created.id,
+          rating: review.rating,
+          title: review.title,
+          body: review.body,
+          photos: JSON.stringify(review.photos ?? [])
+        }))
+      });
+    }
+
+    if (product.questions?.length) {
+      await prisma.question.createMany({
+        data: product.questions.map((question) => ({
+          productId: created.id,
+          body: question.body,
+          answer: question.answer ?? null
+        }))
+      });
+    }
   }
 }
 
