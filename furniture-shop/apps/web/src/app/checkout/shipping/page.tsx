@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckoutSummary } from "@/components/checkout-summary";
+import { useCheckoutStore } from "@/lib/store/checkout-store";
 
 type ShippingOption = {
   id: string;
@@ -23,9 +24,9 @@ const FALLBACK_OPTIONS: ShippingOption[] = [
 ];
 
 export default function CheckoutShippingPage() {
+  const { address, shippingOption, setShippingOption } = useCheckoutStore();
   const [postalCode, setPostalCode] = useState("");
   const [options, setOptions] = useState<ShippingOption[]>(FALLBACK_OPTIONS);
-  const [selected, setSelected] = useState("white-glove");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,8 +50,8 @@ export default function CheckoutShippingPage() {
       const data = await response.json();
       const quotes = (data.quotes as ShippingOption[]) ?? FALLBACK_OPTIONS;
       setOptions(quotes);
-      if (!quotes.some((option) => option.id === selected)) {
-        setSelected(quotes[0]?.id ?? "");
+      if (!quotes.some((option) => option.id === shippingOption)) {
+        setShippingOption(quotes[0]?.id ?? "");
       }
     } catch (err) {
       console.error("Failed to fetch shipping quotes", err);
@@ -62,12 +63,14 @@ export default function CheckoutShippingPage() {
   }
 
   useEffect(() => {
-    fetchQuotes();
-  }, []);
+    // pre-fill postal code from address store
+    setPostalCode(address.postalCode);
+    fetchQuotes(address.postalCode);
+  }, [address.postalCode]);
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
-      <div className="space-y-6 rounded-3xl border border-slate-200 bg-white p-6">
+    <div className="grid gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="space-y-6 rounded-3xl border border-slate-200 bg-white p-4 sm:p-6">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm font-semibold text-slate-900">배송 옵션</p>
@@ -115,8 +118,8 @@ export default function CheckoutShippingPage() {
                       <input
                         name="shipping"
                         type="radio"
-                        checked={selected === option.id}
-                        onChange={() => setSelected(option.id)}
+                        checked={shippingOption === option.id}
+                        onChange={() => setShippingOption(option.id)}
                       />
                       <div>
                         <p className="text-sm font-semibold text-slate-900">{option.label}</p>
@@ -134,12 +137,12 @@ export default function CheckoutShippingPage() {
 
         <Link
           href="/checkout/payment"
-          className="inline-flex items-center justify-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+          className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
         >
           다음 단계: 결제 정보
         </Link>
       </div>
-      <CheckoutSummary />
+      <CheckoutSummary sticky />
     </div>
   );
 }

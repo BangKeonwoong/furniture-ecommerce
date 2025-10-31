@@ -17,6 +17,7 @@ export async function POST(request: Request) {
     }
 
     if (!stripe) {
+      console.log("[Checkout] Mock payment intent", { amount, currency, customerEmail });
       return NextResponse.json({ clientSecret: "mock_client_secret" });
     }
 
@@ -27,6 +28,7 @@ export async function POST(request: Request) {
       automatic_payment_methods: { enabled: true }
     });
 
+    console.log("[Checkout] Stripe payment intent created", { id: intent.id, amount, currency });
     return NextResponse.json({ clientSecret: intent.client_secret });
   } catch (error) {
     console.error("Create intent failed", error);

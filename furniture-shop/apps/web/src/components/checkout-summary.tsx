@@ -7,14 +7,24 @@ function formatCurrency(value: number, currency: string) {
   return new Intl.NumberFormat("ko-KR", { style: "currency", currency }).format(value / 100);
 }
 
-export function CheckoutSummary({ ctaLabel, ctaHref }: { ctaLabel?: string; ctaHref?: string }) {
+type CheckoutSummaryProps = {
+  ctaLabel?: string;
+  ctaHref?: string;
+  sticky?: boolean;
+};
+
+export function CheckoutSummary({ ctaLabel, ctaHref, sticky = false }: CheckoutSummaryProps) {
   const items = useCartStore((state) => state.items);
 
   const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const currency = items[0]?.currency ?? "KRW";
 
   return (
-    <aside className="space-y-4 rounded-3xl border border-slate-200 bg-slate-50 p-6 text-sm text-slate-600">
+    <aside
+      className={`space-y-4 rounded-3xl border border-slate-200 bg-slate-50 p-6 text-sm text-slate-600 ${
+        sticky ? "fixed inset-x-4 bottom-6 z-40 shadow-lg sm:static sm:inset-auto sm:shadow-none" : ""
+      }`}
+    >
       <p className="text-sm font-semibold text-slate-900">주문 요약</p>
       {items.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-200 p-4 text-xs text-slate-500">

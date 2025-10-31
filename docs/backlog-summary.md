@@ -6,12 +6,19 @@
 - 디자인 산출물(Figma, 이미지, 3D 모델) 전달 대기.
 - 체크아웃 단계 상태 공유(주소/배송 선택값) 저장 방식 미결정.
 
-## Next Sprint Candidates
-1. **모바일 QA**: 375px 뷰에서 헤더, 필터, 체크아웃 CTA 확인 및 개선.
-2. **E2E 구성**: Playwright 설치 후 스모크 시나리오 구현.
-3. **데이터 확장**: 리뷰/질문 샘플, 3D 모델 메타데이터 추가.
-4. **상태 공유**: 체크아웃 단계 데이터를 서버 액션 또는 Zustand persist로 저장.
-5. **로깅 연동**: Stripe/Shipping API 스텁 호출을 Sentry/Pulse에 기록.
+## Next Sprint Objectives
+1. **모바일 QA 개선**
+   - 375px 뷰 헤더/필터/CTA 정리
+   - Checkout CTA 포지션 조정, 모바일 전용 간격 개선
+2. **체크아웃 상태 공유**
+   - 주소/배송 옵션/결제 client secret을 전역 저장 및 복원
+   - Zustand persist 또는 URL 파라미터/서버 액션 전략 결정
+3. **실 연동 준비**
+   - Stripe/Typesense 키 확보 → `.env`/`integration-notes` 업데이트
+   - Logging/Sentry 스텁 추가
+4. **테스트 자동화**
+   - Playwright 설치 가능 시 스모크 테스트 구현
+   - 모바일/데스크톱 뷰포트 기본 E2E 작성
 
 ## Dependencies / Notes
 - Postgres 전환은 `docs/postgres-migration-plan.md` 참고.

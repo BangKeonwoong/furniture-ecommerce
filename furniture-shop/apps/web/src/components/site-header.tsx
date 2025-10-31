@@ -16,7 +16,7 @@ export function SiteHeader() {
 
   return (
     <header className="border-b border-slate-200 bg-white/80 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
         <Link href="/" className="text-lg font-semibold tracking-tight text-slate-900">
           Loom & Lattice
         </Link>
@@ -62,7 +62,7 @@ export function SiteHeader() {
         </button>
       </div>
       {open && (
-        <div className="border-t border-slate-200 bg-white px-6 py-4 md:hidden">
+        <div className="border-t border-slate-200 bg-white px-4 py-4 md:hidden">
           <nav className="flex flex-col gap-4 text-sm font-medium text-slate-700">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href} onClick={() => setOpen(false)}>

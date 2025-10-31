@@ -4,19 +4,22 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckoutSummary } from "@/components/checkout-summary";
 import { useCartStore } from "@/lib/store/cart-store";
+import { useCheckoutStore } from "@/lib/store/checkout-store";
 
 export default function CheckoutPaymentPage() {
   const items = useCartStore((state) => state.items);
   const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const currency = items[0]?.currency ?? "KRW";
+  const { setClientSecret, clientSecret: storedClientSecret } = useCheckoutStore();
 
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [clientSecret, setClientSecretState] = useState<string | null>(storedClientSecret ?? null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function createIntent() {
       if (subtotal <= 0) {
+        setClientSecretState(null);
         setClientSecret(null);
         return;
       }
@@ -34,6 +37,7 @@ export default function CheckoutPaymentPage() {
         }
 
         const data = await response.json();
+        setClientSecretState(data.clientSecret ?? null);
         setClientSecret(data.clientSecret ?? null);
       } catch (err) {
         console.error("Failed to create payment intent", err);
@@ -47,8 +51,8 @@ export default function CheckoutPaymentPage() {
   }, [subtotal, currency]);
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
-      <div className="space-y-6 rounded-3xl border border-slate-200 bg-white p-6">
+    <div className="grid gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="space-y-6 rounded-3xl border border-slate-200 bg-white p-4 sm:p-6">
         <div>
           <p className="text-sm font-semibold text-slate-900">결제 수단</p>
           <div className="mt-4 space-y-3 text-sm text-slate-600">
@@ -75,7 +79,7 @@ export default function CheckoutPaymentPage() {
         </div>
         <Link
           href="/checkout/success/temp-order"
-          className="inline-flex items-center justify-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+          className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
         >
           주문 완료하기
         </Link>

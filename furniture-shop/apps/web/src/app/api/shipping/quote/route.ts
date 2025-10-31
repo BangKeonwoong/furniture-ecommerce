@@ -13,6 +13,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing postalCode or shippingClass" }, { status: 400 });
     }
 
+    console.log("[Shipping] Quote requested", body);
     const mockQuotes = [
       {
         id: "white-glove",
