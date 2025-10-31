@@ -31,7 +31,7 @@ export function CheckoutSummary({ ctaLabel, ctaHref, sticky = false }: CheckoutS
         <div className="rounded-2xl border border-dashed border-slate-200 p-4 text-xs text-slate-500">
           장바구니에 담긴 상품이 없습니다.{" "}
           <Link
-            href={{ pathname: "/category/[slug]", query: { slug: "seating" } }}
+            href={{ pathname: "/category/[slug]", params: { slug: "seating" } }}
             className="underline"
           >
             카테고리

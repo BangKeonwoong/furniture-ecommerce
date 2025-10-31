@@ -51,7 +51,7 @@ export default function HomePage() {
           {categories.map((category) => (
             <Link
               key={category.slug}
-              href={{ pathname: "/category/[slug]", query: { slug: category.slug } }}
+              href={{ pathname: "/category/[slug]", params: { slug: category.slug } }}
               className="group rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
               <p className="text-xs uppercase tracking-[0.25em] text-slate-400">{category.slug}</p>
