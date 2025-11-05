@@ -7,7 +7,10 @@
 - [ ] 개인정보/약관 처리 지침 정리: 마케팅 동의, 계정 삭제 플로우, 개인정보 보관 기간.
 
 ## 2. 데이터 모델 및 Prisma 스키마
-- [ ] `User` 모델(이메일/암호 해시/프로필)과 `Session` 또는 `AuthToken` 구조 설계.
+- [x] `User`/`Session`/`VerificationToken` 모델 필드 정의
+  - User: `id`, `email`(unique), `passwordHash`, `name`, `marketingOptIn`, `createdAt`, `updatedAt`, `deletedAt?`
+  - Session: `id`, `userId`, `expiresAt`, `userAgent`, `ipAddress`, `createdAt` (서버 세션 테이블)
+  - VerificationToken: `id`, `userId`, `token`, `type`("PASSWORD_RESET" | "EMAIL_VERIFY"), `expiresAt`, `consumedAt?`
 - [ ] Prisma 마이그레이션 생성 및 샌드박스 DB 반영.
 - [ ] Seed 데이터 업데이트(테스트 계정 1~2개).
 
