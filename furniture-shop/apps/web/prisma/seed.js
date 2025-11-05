@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
 
@@ -8,6 +9,21 @@ const PLACEHOLDERS = {
   bed: "https://picsum.photos/seed/aeris-bed/1200/800",
   dining: "https://picsum.photos/seed/selene-table/1200/800"
 };
+
+const USERS = [
+  {
+    email: "demo@loomlattice.com",
+    password: "Passw0rd!",
+    name: "Demo User",
+    marketingOptIn: true
+  },
+  {
+    email: "manager@loomlattice.com",
+    password: "Manager123!",
+    name: "Ops Manager",
+    marketingOptIn: false
+  }
+];
 
 const PRODUCTS = [
   {
@@ -228,10 +244,39 @@ const PRODUCTS = [
 ];
 
 async function seed() {
+  await prisma.verificationToken.deleteMany();
+  await prisma.session.deleteMany();
+  await prisma.user.deleteMany();
   await prisma.image.deleteMany();
   await prisma.variant.deleteMany();
   await prisma.product.deleteMany();
   await prisma.collection.deleteMany();
+
+  const hashedUsers = await Promise.all(
+    USERS.map(async (user) => ({
+      email: user.email,
+      passwordHash: await bcrypt.hash(user.password, 10),
+      name: user.name,
+      marketingOptIn: user.marketingOptIn
+    }))
+  );
+
+  const createdUsers = [];
+  for (const user of hashedUsers) {
+    const created = await prisma.user.create({ data: user });
+    createdUsers.push(created);
+  }
+
+  if (createdUsers.length > 0) {
+    await prisma.session.create({
+      data: {
+        userId: createdUsers[0].id,
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        userAgent: "seed-script",
+        ipAddress: "127.0.0.1"
+      }
+    });
+  }
 
   await prisma.collection.createMany({
     data: [
