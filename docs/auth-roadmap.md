@@ -15,9 +15,9 @@
 - [ ] Seed 데이터 업데이트(테스트 계정 1~2개).
 
 ## 3. 서버 로직
-- [ ] 비밀번호 해시 및 검증 유틸 (`bcrypt` or `argon2`) 도입.
-- [ ] `POST /api/auth/signup`, `POST /api/auth/login`, `POST /api/auth/logout` 라우트 설계.
-- [ ] 세션 관리 선택: NextAuth vs 커스텀 JWT/세션 스토어 → 결정 후 구현.
+- [x] 비밀번호 해시 및 검증 유틸 (`bcryptjs`) 도입.
+- [x] `POST /api/auth/signup`, `POST /api/auth/login`, `POST /api/auth/logout` 라우트 설계.
+- [x] 세션 관리 선택: Prisma `Session` 테이블 + httpOnly 쿠키(`sessionId`).
 - [ ] CSRF 방어(쿠키 SameSite, anti-CSRF 토큰), rate limiting, 브루트포스 방지 적용.
 - [ ] 감사 로그(로그인 실패/성공) 및 관측용 메트릭 정의.
 - [ ] 이메일 검증/비밀번호 재설정 토큰 로직(후속 단계로 분리 가능).
