@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/prisma";
+import { logSecurityEvent } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -12,6 +13,7 @@ export async function POST() {
 
     if (sessionId) {
       await prisma.session.delete({ where: { id: sessionId } }).catch(() => null);
+      logSecurityEvent("auth.logout", { sessionId });
       cookieStore.delete("sessionId");
     }
 

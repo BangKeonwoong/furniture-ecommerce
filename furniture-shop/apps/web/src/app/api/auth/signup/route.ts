@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
 import { prisma } from "@/lib/prisma";
+import { logSecurityEvent } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -15,6 +16,7 @@ export async function POST(request: Request) {
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
+      logSecurityEvent("auth.signup.conflict", { email });
       return NextResponse.json({ error: "이미 가입된 이메일입니다." }, { status: 409 });
     }
 
@@ -29,6 +31,7 @@ export async function POST(request: Request) {
       }
     });
 
+    logSecurityEvent("auth.signup.success", { userId: user.id, email: user.email });
     return NextResponse.json({ id: user.id, email: user.email, name: user.name }, { status: 201 });
   } catch (error) {
     console.error("[Signup] Failed", error);

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
 import { prisma } from "@/lib/prisma";
+import { logSecurityEvent } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -16,11 +17,13 @@ export async function POST(request: Request) {
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user || !user.passwordHash) {
+      logSecurityEvent("auth.login.failure", { email, reason: "not_found" });
       return NextResponse.json({ error: "일치하는 계정을 찾을 수 없습니다." }, { status: 401 });
     }
 
     const isValid = await bcrypt.compare(password, user.passwordHash);
     if (!isValid) {
+      logSecurityEvent("auth.login.failure", { email, reason: "invalid_password" });
       return NextResponse.json({ error: "비밀번호가 올바르지 않습니다." }, { status: 401 });
     }
 
@@ -30,6 +33,8 @@ export async function POST(request: Request) {
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
       }
     });
+
+    logSecurityEvent("auth.login.success", { userId: user.id, email: user.email, sessionId: session.id });
 
     cookies().set({
       name: "sessionId",
