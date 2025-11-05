@@ -121,17 +121,12 @@ model Session {
 }
 
 model VerificationToken {
-  id         String                 @id @default(cuid())
+  id         String   @id @default(cuid())
   userId     String?
-  user       User?                  @relation(fields: [userId], references: [id], onDelete: SetNull)
-  token      String                 @unique
-  type       VerificationTokenType
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  token      String   @unique
+  type       String
   expiresAt  DateTime
   consumedAt DateTime?
-  createdAt  DateTime               @default(now())
-}
-
-enum VerificationTokenType {
-  EMAIL_VERIFY
-  PASSWORD_RESET
+  createdAt  DateTime @default(now())
 }

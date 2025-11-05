@@ -35,7 +35,7 @@
 - [ ] Prisma 스키마에 `User`/`Session` 모델 추가 및 마이그레이션.
   - [x] User/Session/VerificationToken 필드 요구사항 정리.
   - [x] Prisma 스키마에 모델 추가 (User/Session/VerificationToken) 및 enum 정의.
-  - [ ] Prisma 마이그레이션 생성 & SQLite 샌드박스에 적용.
+  - [x] Prisma 마이그레이션 생성 & SQLite 샌드박스에 적용.
   - [ ] Seed 데이터(테스트 계정, 세션) 작성.
 - [ ] 비밀번호 해시 유틸, 세션/JWT 전략 결정 및 서버 라우트 초안 구현.
 - [ ] CSRF 방어, rate limit, 감사 로그 등 보안 미들웨어 구성.
